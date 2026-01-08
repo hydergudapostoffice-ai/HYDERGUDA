@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import Header from './components/Header';
-import Ticker from './components/Ticker';
-import TrackingSection from './components/TrackingSection';
-import SchemeCard from './components/SchemeCard';
 import ModalWrapper from './components/modals/ModalWrapper';
 import PliCalculator from './components/modals/PliCalculator';
-import StandardCalculator from './components/modals/StandardCalculator';
-import { SCHEMES } from './constants';
+import RpliCalculator from './components/modals/RpliCalculator';
 import { SchemeId, Lang } from './types';
 
 export default function App() {
   const [lang, setLang] = useState<Lang>('en');
   const [modalOpen, setModalOpen] = useState(false);
   const [activeSchemeId, setActiveSchemeId] = useState<SchemeId | null>(null);
-
-  const toggleLang = () => setLang(prev => (prev === 'en' ? 'te' : 'en'));
 
   const openModal = (id: SchemeId) => {
     setActiveSchemeId(id);
@@ -23,58 +17,74 @@ export default function App() {
 
   const closeModal = () => {
     setModalOpen(false);
-    // Slight delay to clear active scheme for animation if needed, but immediate is fine for now
     setTimeout(() => setActiveSchemeId(null), 300);
   };
 
   return (
-    <div className="relative min-h-screen text-white overflow-x-hidden font-sans">
-      {/* Background Gradient */}
-      <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 pointer-events-none"></div>
+    <div className="relative min-h-screen text-white overflow-x-hidden font-sans bg-black">
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] pointer-events-none"></div>
 
-      <div className="relative z-10 max-w-md mx-auto md:max-w-full">
-        <Header lang={lang} onToggleLang={toggleLang} />
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <Header />
 
-        <section className="text-center py-8 px-4">
-          <h1 className="text-3xl font-extrabold mb-2 text-white">Government Guaranteed</h1>
-          <p className="text-slate-400 text-sm mb-6">100% Secure Wealth Creation.</p>
-          <Ticker />
-        </section>
-
-        <TrackingSection />
-
-        <section className="px-4 pb-24 max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* PLI Card (Featured) */}
-            <div 
-              onClick={() => openModal('pli')} 
-              className="glass-card p-6 rounded-xl relative overflow-hidden cursor-pointer group border-yellow-500/50 hover:bg-yellow-500/5 transition transform hover:scale-[1.02] shadow-xl shadow-yellow-900/20"
-            >
-              <div className="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
-                Recommended
-              </div>
-              <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-4 border border-yellow-500/30">
-                <i className="fa-solid fa-shield-halved text-xl text-yellow-400"></i>
-              </div>
-              <h3 className="font-bold text-lg text-yellow-500 mb-1">Postal Life Insurance</h3>
-              <p className="text-sm text-slate-400">Low Premium, High Bonus. Best for Professionals.</p>
+        <main>
+          {/* Hero Section */}
+          <section className="text-center min-h-[calc(100vh-80px)] flex flex-col justify-center items-center py-20 px-4">
+            <h1 className="text-4xl md:text-6xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 leading-tight">
+              The Highest Bonus. The Lowest Premium.
+              <span className="block">Guaranteed by the Government of India.</span>
+            </h1>
+            <p className="text-slate-400 text-base md:text-lg max-w-3xl mx-auto mb-12">
+              Why pay more to private insurers? Secure your family’s future directly with India Post. No middlemen. No hidden charges. Just pure returns.
+            </p>
+            <div className="arrow-bounce text-slate-500">
+              <i className="fa-solid fa-arrow-down text-2xl"></i>
             </div>
+          </section>
 
-            {/* Other Schemes */}
-            {SCHEMES.map(scheme => (
-              <React.Fragment key={scheme.id}>
-                <SchemeCard 
-                  scheme={scheme} 
-                  lang={lang} 
-                  onClick={() => openModal(scheme.id)} 
-                />
-              </React.Fragment>
-            ))}
-          </div>
-        </section>
+          {/* Selection Cards Section */}
+          <section id="selection" className="px-4 pb-24 max-w-4xl mx-auto">
+             <h2 className="text-center text-3xl font-bold mb-10">Who is this for?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* PLI Card */}
+              <div 
+                onClick={() => openModal('pli')} 
+                className="glass-card p-8 rounded-2xl relative overflow-hidden cursor-pointer group border-amber-400/30 hover:border-amber-400/80 transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="absolute top-0 right-0 bg-amber-400 text-black text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                  Best ROI
+                </div>
+                <div className="w-14 h-14 rounded-full bg-amber-400/10 flex items-center justify-center mb-5 border border-amber-400/20">
+                  <i className="fa-solid fa-shield-halved text-2xl text-amber-400"></i>
+                </div>
+                <h3 className="font-bold text-xl text-amber-400 mb-2">For Employees & Professionals</h3>
+                <p className="text-sm text-slate-400 mb-6">Exclusive to Govt, Semi-Govt employees, and Degree Holders. The gold standard of insurance with the highest bonus rates in the industry.</p>
+                <span className="font-semibold text-sm text-white group-hover:text-amber-400 transition">Check Eligibility &gt;</span>
+              </div>
 
-        <footer className="text-center py-8 text-slate-600 text-[10px] uppercase tracking-widest border-t border-white/5 bg-black/20">
-          <p>Developed by GN Prakash Reddy [Hyderguda S.O]</p>
+              {/* RPLI Card */}
+              <div 
+                onClick={() => openModal('rpli')} 
+                className="glass-card p-8 rounded-2xl relative overflow-hidden cursor-pointer group border-blue-400/30 hover:border-blue-400/80 transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="absolute top-0 right-0 bg-blue-400 text-black text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                  Most Affordable
+                </div>
+                <div className="w-14 h-14 rounded-full bg-blue-400/10 flex items-center justify-center mb-5 border border-blue-400/20">
+                  <i className="fa-solid fa-tractor text-2xl text-blue-400"></i>
+                </div>
+                <h3 className="font-bold text-xl text-blue-400 mb-2">For Rural Residents</h3>
+                <p className="text-sm text-slate-400 mb-6">High-return protection designed for everyone living in rural areas. Small monthly savings, massive maturity value.</p>
+                <span className="font-semibold text-sm text-white group-hover:text-blue-400 transition">Check Eligibility &gt;</span>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer className="text-center py-6 text-slate-500 text-xs border-t border-white/10 bg-black/20 flex flex-col md:flex-row justify-between items-center px-8">
+          <p>Managed by Hyderguda Sub-Office. PIN: 500048.</p>
+          <p className="my-2 md:my-0 font-bold">IRDAI Exempt | Ministry of Communications</p>
+          <p>Questions? Visit us at Hyderguda S.O.</p>
         </footer>
       </div>
 
@@ -83,14 +93,13 @@ export default function App() {
         <ModalWrapper 
           isOpen={modalOpen} 
           onClose={closeModal}
-          children={
-            activeSchemeId === 'pli' ? (
-              <PliCalculator lang={lang} />
-            ) : (
-              <StandardCalculator schemeId={activeSchemeId} lang={lang} />
-            )
-          }
-        />
+        >
+          {activeSchemeId === 'pli' ? (
+            <PliCalculator lang={lang} />
+          ) : activeSchemeId === 'rpli' ? (
+            <RpliCalculator lang={lang} />
+          ) : null}
+        </ModalWrapper>
       )}
     </div>
   );

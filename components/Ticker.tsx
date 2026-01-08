@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 const messages = [
-  "Did you know? SSY is Tax Free.",
-  "PLI Bonus is highest in India.",
-  "Track Speed Post here instantly."
+  "PLI offers the highest bonus in India.",
+  "RPLI is available for every Indian citizen.",
+  "Track your Speed Post articles instantly."
 ];
 
 export default function Ticker() {

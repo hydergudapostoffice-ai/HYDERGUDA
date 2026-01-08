@@ -1,22 +1,22 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Lang } from '../../types';
-import { PLI_TABLE } from '../../constants';
+import { RPLI_MONTHLY_TABLE, RPLI_HALF_YEARLY_TABLE, RPLI_YEARLY_TABLE } from '../../constants';
 
-interface PliCalculatorProps {
+interface RpliCalculatorProps {
   lang: Lang;
 }
 
 type Mode = 'monthly' | 'half' | 'yearly';
 
-export default function PliCalculator({ lang }: PliCalculatorProps) {
+export default function RpliCalculator({ lang }: RpliCalculatorProps) {
   const [age, setAge] = useState<number>(25);
-  const [sumAssured, setSumAssured] = useState<number>(1000000);
+  const [sumAssured, setSumAssured] = useState<number>(500000);
   const [matAge, setMatAge] = useState<number>(60);
   const [mode, setMode] = useState<Mode>('monthly');
   const [docsOpen, setDocsOpen] = useState(false);
 
   const availableMatAges = useMemo(() => {
-    const tableEntry = PLI_TABLE[age];
+    const tableEntry = RPLI_MONTHLY_TABLE[age];
     if (!tableEntry) return [];
     return Object.keys(tableEntry).map(Number).sort((a, b) => a - b);
   }, [age]);
@@ -29,97 +29,95 @@ export default function PliCalculator({ lang }: PliCalculatorProps) {
 
   const validateSum = () => {
     let val = sumAssured;
-    if (val < 20000) val = 20000;
-    else if (val > 5000000) val = 5000000;
-    else if (val % 10000 !== 0) val = Math.round(val / 10000) * 10000;
+    if (val < 10000) val = 10000;
+    else if (val > 1000000) val = 1000000;
+    else if (val % 5000 !== 0) val = Math.round(val / 5000) * 5000;
     setSumAssured(val);
   };
+  
+  const getPremiumDetails = (calcMode: Mode, currentAge: number) => {
+    const table = calcMode === 'monthly' ? RPLI_MONTHLY_TABLE :
+                  calcMode === 'half' ? RPLI_HALF_YEARLY_TABLE :
+                  RPLI_YEARLY_TABLE;
+    
+    const baseGross = table[currentAge]?.[matAge];
+    if (!baseGross) return { net: 0 };
 
-  const calculatePremium = () => {
-    const base = PLI_TABLE[age]?.[matAge];
-    if (!base) return 0;
+    const gross = baseGross * (sumAssured / 1000000);
+    
+    let rebate = 0;
+    if (calcMode === 'monthly') rebate = (sumAssured / 10000) * 0.5;
+    else if (calcMode === 'half') rebate = (sumAssured / 10000) * 0.5 * 6;
+    else if (calcMode === 'yearly') rebate = (sumAssured / 10000) * 0.5 * 12;
 
-    const gross = (base / 1000000) * sumAssured;
-    const rebate = Math.floor(sumAssured / 20000);
+    return { net: Math.round(gross - rebate) };
+  }
 
-    if (mode === 'monthly') return Math.round(gross - rebate);
-    if (mode === 'half') return Math.round((gross * 6 * 0.985) - (rebate * 6));
-    if (mode === 'yearly') return Math.round((gross * 12 * 0.97) - (rebate * 12));
-    return 0;
-  };
-
-  const premium = calculatePremium();
+  const premium = getPremiumDetails(mode, age).net;
 
   const calculateCostOfDelay = () => {
     const nextAge = age + 1;
-    if (!PLI_TABLE[nextAge] || !PLI_TABLE[nextAge][matAge]) return 0;
-
+    if (!RPLI_YEARLY_TABLE[nextAge] || !RPLI_YEARLY_TABLE[nextAge][matAge]) return 0;
+    
     const calculateTotalPaid = (currentAge: number) => {
-        const base = PLI_TABLE[currentAge]?.[matAge];
-        if (!base) return 0;
-        const gross = (base / 1000000) * sumAssured;
-        const rebate = Math.floor(sumAssured / 20000);
-        const yearlyPremium = Math.round((gross * 12 * 0.97) - (rebate * 12));
+        const yearlyPremium = getPremiumDetails('yearly', currentAge).net;
         return yearlyPremium * (matAge - currentAge);
     }
     const currentTotal = calculateTotalPaid(age);
     const nextYearTotal = calculateTotalPaid(nextAge);
 
-    if(nextYearTotal === 0 || currentTotal === 0) return 0;
+    if (currentTotal <= 0 || nextYearTotal <= 0) return 0;
     
-    return nextYearTotal - currentTotal;
+    return Math.round(nextYearTotal - currentTotal);
   };
-  
-  const costOfDelay = calculateCostOfDelay();
 
-  const totalBonus = (sumAssured / 1000) * 52 * (matAge - age);
+  const costOfDelay = calculateCostOfDelay();
+  
+  const totalBonus = (sumAssured / 1000) * 48 * (matAge - age);
   const maturity = sumAssured + totalBonus;
   const multiplier = mode === 'monthly' ? 12 : (mode === 'half' ? 2 : 1);
   const totalPaid = premium * multiplier * (matAge - age);
-
-  const format = (v: number) => '₹ ' + Math.round(v).toLocaleString('en-IN');
   
+  const format = (v: number) => '₹ ' + Math.round(v).toLocaleString('en-IN');
+
   const getWhatsappLink = () => {
-    const message = `Hello, I'm interested in a Postal Life Insurance (PLI) policy. Here is my generated quote for discussion:\n\n- Scheme: PLI Santosh\n- Age: ${age}\n- Sum Assured: ${format(sumAssured)}\n- Maturity Age: ${matAge}\n- Payment Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}\n- Estimated Premium: ${format(premium)} / ${mode}\n- Maturity Value: ${format(maturity)}\n\nPlease provide me with further details on how to proceed.`;
+    const message = `Hello, I'm interested in a Rural Postal Life Insurance (RPLI) policy. Here is my generated quote for discussion:\n\n- Scheme: RPLI Gram Santosh\n- Age: ${age}\n- Sum Assured: ${format(sumAssured)}\n- Maturity Age: ${matAge}\n- Payment Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}\n- Estimated Premium: ${format(premium)} / ${mode}\n- Maturity Value: ${format(maturity)}\n\nPlease provide me with further details on how to proceed.`;
     return `https://wa.me/?text=${encodeURIComponent(message)}`;
   };
 
-  const strokeDasharray = 251;
-  const strokeDashoffset = 251 - (251 * ((age - 19) / (55 - 19)));
-
   return (
-    <div className="pb-24">
+    <div className="pb-32">
       <div className="p-6 pb-4 border-b border-white/10 bg-slate-900/95 sticky top-0 z-40">
-        <h2 className="text-yellow-400 font-bold text-lg">PLI Santosh (Endowment Assurance)</h2>
+        <h2 className="text-blue-400 font-bold text-lg">RPLI Gram Santosh (Endowment Assurance)</h2>
         <p className="text-xs text-slate-400">Build a corpus. Get a lump sum cash payout at age {matAge}.</p>
       </div>
 
       <div className="p-5 space-y-6">
         <div className="text-center">
-            <input 
+           <input 
             type="range" 
             min="19" 
             max="55" 
             value={age} 
             onChange={(e) => setAge(Number(e.target.value))}
-            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-yellow-500 relative z-10"
+            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 relative z-10"
           />
            <p className="text-xs text-slate-400 mt-2">Your Age: <b className="text-white">{age}</b></p>
         </div>
 
-        <div className="glass-card rounded-xl p-4 border-l-4 border-yellow-500">
+        <div className="glass-card rounded-xl p-4 border-l-4 border-blue-500">
           <label className="text-[10px] text-slate-400 font-bold uppercase">Sum Assured (₹)</label>
           <input 
             type="number" 
             value={sumAssured} 
             onChange={(e) => setSumAssured(Number(e.target.value))}
             onBlur={validateSum}
-            step="10000" 
-            min="20000" 
-            max="5000000" 
+            step="5000" 
+            min="10000" 
+            max="1000000" 
             className="bg-transparent text-2xl font-black text-white w-full focus:outline-none"
           />
-          <div className="h-px bg-white/10 my-3"></div>
+           <div className="h-px bg-white/10 my-3"></div>
           <div className="flex justify-between items-center text-[10px]">
             <span className="text-slate-400">MATURITY AGE:</span>
             <select 
@@ -162,13 +160,26 @@ export default function PliCalculator({ lang }: PliCalculatorProps) {
             </div>
             <div className="space-y-2 mt-4">
                 <div className="text-right">
-                    <p className="text-[10px] text-yellow-400 uppercase font-bold">Your Maturity Value</p>
-                    <p className="text-2xl font-black text-yellow-400">{format(maturity)}</p>
+                    <p className="text-[10px] text-blue-400 uppercase font-bold">Your Maturity Value</p>
+                    <p className="text-2xl font-black text-blue-400">{format(maturity)}</p>
                 </div>
                 <div className="relative h-6 w-full bg-slate-700 rounded-full overflow-hidden border-2 border-slate-600">
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-amber-400 h-full"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-400 h-full"></div>
                 </div>
-                <p className="text-xs text-center text-slate-300 pt-2">Includes <b className="text-yellow-400">{format(totalBonus)}</b> in Government Bonuses.</p>
+                <p className="text-xs text-center text-slate-300 pt-2">Includes <b className="text-blue-400">{format(totalBonus)}</b> in Government Bonuses.</p>
+            </div>
+        </div>
+        
+        <div className="border-t border-white/10 pt-4">
+            <button onClick={() => setDocsOpen(!docsOpen)} className="w-full flex justify-between text-xs font-bold text-slate-400 uppercase items-center">
+                <span>Documents</span> 
+                <i className={`fa-solid fa-chevron-down transition-transform ${docsOpen ? 'rotate-180' : ''}`}></i>
+            </button>
+            <div className={`transition-all duration-300 ease-in-out overflow-hidden ${docsOpen ? 'max-h-[500px] pt-2' : 'max-h-0'}`}>
+                <ul className="text-xs text-slate-400 space-y-1">
+                    <li>{lang === 'en' ? '• Aadhaar Card' : '• ఆధార్ కార్డు'}</li>
+                    <li>{lang === 'en' ? '• Village Address Proof' : '• గ్రామ చిరునామా రుజువు'}</li>
+                </ul>
             </div>
         </div>
       </div>
@@ -182,7 +193,7 @@ export default function PliCalculator({ lang }: PliCalculatorProps) {
             href={getWhatsappLink()} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-full bg-yellow-500 hover:bg-yellow-400 text-black px-5 py-3 rounded-xl font-bold text-base flex items-center justify-center gap-2 shadow-lg transition"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 rounded-xl font-bold text-base flex items-center justify-center gap-2 shadow-lg transition"
         >
             <span>Get This Plan on WhatsApp</span>
             <i className="fa-solid fa-arrow-right"></i>

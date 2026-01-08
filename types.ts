@@ -1,28 +1,29 @@
 export type Lang = 'en' | 'te';
-export type InputType = 'monthly' | 'lump';
 
-export type SchemeId = 'pli' | 'ssy' | 'ppf' | 'mis' | 'td' | 'rd';
+// Fix: Extended SchemeId to include all possible schemes
+export type SchemeId = 'pli' | 'rpli' | 'ssy' | 'ppf' | 'rd' | 'td' | 'mis';
 
+export interface InsuranceTableData {
+  [age: number]: {
+    [maturityAge: number]: number;
+  }
+}
+
+// Fix: Added missing Scheme interface
 export interface Scheme {
   id: SchemeId;
-  icon: string;
-  tag: string;
-  tagColor: string;
   name: string;
   nameTe: string;
   desc: string;
   descTe: string;
+  icon: string;
+  tag: string;
+  tagColor: string;
   rate: number;
   min: number;
   max: number;
   step: number;
-  inputType: InputType;
+  inputType: 'monthly' | 'lumpsum';
   docs: string[];
   docsTe: string[];
-}
-
-export interface PliTableData {
-  [age: number]: {
-    [maturityAge: number]: number; // Bonus per 10 Lakh (implied base unit) logic from original code seems to be raw premium base per 10L sum assured? Actually looking at logic: `base = pliTable[age][matAge]`. `gross = (base/1000000) * sum`. So the table value is Premium for 10L Sum Assured.
-  }
 }

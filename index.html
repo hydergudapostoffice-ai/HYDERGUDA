@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyderguda Post Office S.O.</title>
+    <title>India Post Insurance | Hyderguda S.O.</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: white; }
         
-        /* Glassmorphism utility */
         .glass-card { 
-            background: rgba(255, 255, 255, 0.08); 
+            background: rgba(255, 255, 255, 0.05); 
             backdrop-filter: blur(12px); 
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1); 
@@ -22,41 +21,32 @@
         @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-4px);} 75% {transform: translateX(4px);} }
         .shake-alert { animation: shake 0.4s ease-in-out; }
         
-        @keyframes glow { 0%, 100% {box-shadow: 0 0 5px #eab308;} 50% {box-shadow: 0 0 15px #eab308;} }
-        .success-pulse { animation: glow 2s infinite; }
+        @keyframes glow { 0%, 100% {box-shadow: 0 0 8px #eab308;} 50% {box-shadow: 0 0 20px #eab308;} }
+        .success-pulse { animation: glow 2.5s infinite ease-in-out; }
+
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-8px); } }
+        .arrow-bounce { animation: bounce 2s infinite; }
 
         /* Custom Scrollbar for Modal */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
 
         /* Range Slider Styling */
-        input[type=range] {
-            -webkit-appearance: none; 
-            background: transparent; 
-        }
+        input[type=range] { -webkit-appearance: none; background: transparent; }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #ffffff;
-            cursor: pointer;
-            margin-top: -6px; 
+            height: 16px; width: 16px; border-radius: 50%;
+            background: #ffffff; cursor: pointer; margin-top: -6px; 
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
         input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 4px;
-            cursor: pointer;
-            background: #475569;
-            border-radius: 2px;
+            width: 100%; height: 4px; cursor: pointer;
+            background: #374151; border-radius: 2px;
         }
-        input[type=range].accent-yellow-500::-webkit-slider-runnable-track { background: #475569; }
         input[type=range].accent-yellow-500::-webkit-slider-thumb { background: #eab308; }
-        input[type=range].accent-green-500::-webkit-slider-runnable-track { background: #475569; }
-        input[type=range].accent-green-500::-webkit-slider-thumb { background: #4ade80; }
+        input[type=range].accent-blue-500::-webkit-slider-thumb { background: #3b82f6; }
     </style>
 <script type="importmap">
 {
