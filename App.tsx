@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import Header from './components/Header';
 import ModalWrapper from './components/modals/ModalWrapper';
 import PliCalculator from './components/modals/PliCalculator';
 import RpliCalculator from './components/modals/RpliCalculator';
+import StandardCalculator from './components/modals/StandardCalculator';
 import { SchemeId, Lang } from './types';
 
 export default function App() {
@@ -89,18 +91,19 @@ export default function App() {
       </div>
 
       {/* Modal */}
-      {modalOpen && activeSchemeId && (
-        <ModalWrapper 
-          isOpen={modalOpen} 
-          onClose={closeModal}
-        >
-          {activeSchemeId === 'pli' ? (
-            <PliCalculator lang={lang} />
-          ) : activeSchemeId === 'rpli' ? (
-            <RpliCalculator lang={lang} />
-          ) : null}
-        </ModalWrapper>
-      )}
+      <ModalWrapper 
+        isOpen={modalOpen && !!activeSchemeId} 
+        onClose={closeModal}
+      >
+        {/* Fix: Handle all possible scheme IDs to prevent empty modals and resolve related TypeScript error. */}
+        {activeSchemeId === 'pli' ? (
+          <PliCalculator lang={lang} />
+        ) : activeSchemeId === 'rpli' ? (
+          <RpliCalculator lang={lang} />
+        ) : activeSchemeId ? (
+          <StandardCalculator schemeId={activeSchemeId} lang={lang} />
+        ) : null}
+      </ModalWrapper>
     </div>
   );
 }
