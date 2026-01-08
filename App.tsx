@@ -31,24 +31,20 @@ export default function App() {
 
         <main>
           {/* Hero */}
-          <section className="text-center min-h-[calc(100vh-80px)] flex flex-col justify-center items-center py-20 px-4">
-            <h1 className="text-4xl md:text-6xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 leading-tight">
-              The Highest Bonus. The Lowest Premium.
-              <span className="block">
-                Guaranteed by the Government of India.
-              </span>
-            </h1>
+          <section className="text-center flex flex-col justify-center items-center py-16 md:py-24 px-4">
+  <h1 className="text-4xl md:text-6xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 leading-tight">
+    The Highest Bonus. The Lowest Premium.
+    <span className="block">Guaranteed by the Government of India.</span>
+  </h1>
 
-            <p className="text-slate-400 text-base md:text-lg max-w-3xl mx-auto mb-12">
-              Why pay more to private insurers? Secure your family’s future
-              directly with India Post. No middlemen. No hidden charges.
-              Just pure returns.
-            </p>
+  <p className="text-slate-400 text-base md:text-lg max-w-3xl mx-auto mb-8">
+    Why pay more to private insurers? Secure your family’s future directly with India Post. No middlemen. No hidden charges. Just pure returns.
+  </p>
 
-            <div className="arrow-bounce text-slate-500">
-              <i className="fa-solid fa-arrow-down text-2xl"></i>
-            </div>
-          </section>
+  <div className="mt-4 text-slate-500">
+    <i className="fa-solid fa-arrow-down text-xl animate-bounce"></i>
+  </div>
+</section>
 
           {/* Scheme selection */}
           <section
