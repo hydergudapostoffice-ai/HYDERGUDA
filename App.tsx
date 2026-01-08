@@ -7,8 +7,6 @@ import PliCalculator from './components/modals/PliCalculator';
 import RpliCalculator from './components/modals/RpliCalculator';
 import StandardCalculator from './components/modals/StandardCalculator';
 import { SchemeId, Lang } from './types';
-import SchemeCard from './components/SchemeCard';
-import { SCHEMES } from './constants';
 
 export default function App() {
   const [lang, setLang] = useState<Lang>('en');
@@ -47,8 +45,6 @@ export default function App() {
             </div>
           </section>
 
-          <Ticker />
-          <TrackingSection />
 
           {/* Selection Cards Section */}
           <section id="selection" className="px-4 pt-16 pb-24 max-w-4xl mx-auto">
@@ -88,14 +84,6 @@ export default function App() {
             </div>
           </section>
 
-          <section id="other-schemes" className="px-4 pb-24 max-w-6xl mx-auto">
-            <h2 className="text-center text-3xl font-bold mb-10">Other Savings Schemes</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {SCHEMES.map(scheme => (
-                <SchemeCard key={scheme.id} scheme={scheme} lang={lang} onClick={() => openModal(scheme.id)} />
-              ))}
-            </div>
-          </section>
         </main>
 
         <footer className="text-center py-6 text-slate-500 text-xs border-t border-white/10 bg-black/20 flex flex-col md:flex-row justify-between items-center px-8">
