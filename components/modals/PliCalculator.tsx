@@ -160,16 +160,17 @@ export default function PliCalculator({ lang }: PliCalculatorProps) {
                 </div>
                 <div className="h-4 w-full bg-slate-700 rounded-full"></div>
             </div>
-            <div className="space-y-2 mt-4">
-                <div className="text-right">
-                    <p className="text-[10px] text-yellow-400 uppercase font-bold">Your Maturity Value</p>
-                    <p className="text-2xl font-black text-yellow-400">{format(maturity)}</p>
-                </div>
-                <div className="relative h-6 w-full bg-slate-700 rounded-full overflow-hidden border-2 border-slate-600">
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-amber-400 h-full"></div>
-                </div>
-                <p className="text-xs text-center text-slate-300 pt-2">Includes <b className="text-yellow-400">{format(totalBonus)}</b> in Government Bonuses.</p>
-            </div>
+            <div className="mt-6 p-5 rounded-2xl border-2 border-yellow-500 bg-yellow-500/10 text-center">
+  <p className="text-xs uppercase font-bold text-yellow-300 mb-1">
+    You will receive at maturity
+  </p>
+  <p className="text-4xl md:text-5xl font-black text-yellow-400">
+    {format(maturity)}
+  </p>
+  <p className="text-xs text-slate-300 mt-2">
+    Includes <b className="text-yellow-400">{format(totalBonus)}</b> Government Bonus
+  </p>
+</div>
         </div>
       </div>
 
