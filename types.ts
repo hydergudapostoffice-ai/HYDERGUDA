@@ -1,4 +1,3 @@
-
 // types.ts
 
 export type InsuranceTableData = {
@@ -9,8 +8,18 @@ export type InsuranceTableData = {
 
 export type InputType = 'monthly' | 'lumpsum' | 'insurance';
 
+/**
+ * ONLY schemes supported by the app
+ */
+export type SchemeId = 'pli' | 'rpli';
+
+/**
+ * Language support
+ */
+export type Lang = 'en' | 'te';
+
 export interface Scheme {
-  id: string;
+  id: SchemeId;
   name: string;
   nameTe?: string;
   desc: string;
