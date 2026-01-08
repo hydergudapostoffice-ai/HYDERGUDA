@@ -1,14 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Lang } from '../../types';
 import { PLI_TABLE } from '../../constants';
 
-interface PliCalculatorProps {
-  lang: Lang;
-}
 
 type Mode = 'monthly' | 'half' | 'yearly';
 
-export default function PliCalculator({ lang }: PliCalculatorProps) {
+export default function PliCalculator() {
   const [age, setAge] = useState<number>(25);
   const [sumAssured, setSumAssured] = useState<number>(1000000);
   const [matAge, setMatAge] = useState<number>(60);
