@@ -165,6 +165,30 @@ export default function PliCalculator({ lang }: PliCalculatorProps) {
                 <div className="h-4 w-full bg-slate-700 rounded-full"></div>
             </div>
             <div className="mt-6 p-5 rounded-2xl border-2 border-yellow-500 bg-yellow-500/10 text-center">
+              <div className="mt-6 p-4 bg-slate-900/80 backdrop-blur-sm border border-white/10 flex flex-col items-center gap-3 rounded-2xl">
+  <div className="text-center">
+    <p className="text-[10px] text-slate-400 uppercase font-bold capitalize">
+      {mode} Premium
+    </p>
+    <div className="text-2xl font-black text-white">
+      {format(premium)}
+    </div>
+  </div>
+
+  <a 
+    href={getWhatsappLink()} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="w-full bg-yellow-500 hover:bg-yellow-400 text-black px-5 py-3 rounded-xl font-bold text-base flex items-center justify-center gap-2 shadow-lg transition"
+  >
+    <span>Get This Plan on WhatsApp</span>
+    <i className="fa-solid fa-arrow-right"></i>
+  </a>
+
+  <p className="text-[10px] text-slate-500">
+    Direct service from Hyderguda S.O. (500048)
+  </p>
+</div>
   <p className="text-xs uppercase font-bold text-yellow-300 mb-1">
     You will receive at maturity
   </p>
@@ -176,23 +200,6 @@ export default function PliCalculator({ lang }: PliCalculatorProps) {
   </p>
 </div>
         </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-slate-900/80 backdrop-blur-sm border-t border-white/10 flex flex-col items-center gap-3 z-50 rounded-b-2xl">
-        <div className="text-center">
-            <p className="text-[10px] text-slate-400 uppercase font-bold capitalize">{mode} Premium</p>
-            <div className="text-2xl font-black text-white">{format(premium)}</div>
-        </div>
-        <a 
-            href={getWhatsappLink()} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="w-full bg-yellow-500 hover:bg-yellow-400 text-black px-5 py-3 rounded-xl font-bold text-base flex items-center justify-center gap-2 shadow-lg transition"
-        >
-            <span>Get This Plan on WhatsApp</span>
-            <i className="fa-solid fa-arrow-right"></i>
-        </a>
-        <p className="text-[10px] text-slate-500">Direct service from Hyderguda S.O. (500048)</p>
       </div>
     </div>
   );
