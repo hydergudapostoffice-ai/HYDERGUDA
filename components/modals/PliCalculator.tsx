@@ -147,7 +147,11 @@ export default function PliCalculator({ lang }: PliCalculatorProps) {
             <button 
                 key={m}
                 onClick={() => setMode(m)}
-                className={`flex-1 py-2 text-[10px] font-bold rounded transition capitalize ${mode === m ? 'bg-slate-600 text-white' : 'text-slate-400'}`}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition capitalize ${
+  mode === m
+    ? 'bg-yellow-500 text-black shadow'
+    : 'text-slate-400 hover:bg-slate-700'
+}`}
             >{m === 'half' ? 'Half-Yearly' : m}</button>
           ))}
         </div>
