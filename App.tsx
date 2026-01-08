@@ -7,8 +7,6 @@ import PliCalculator from './components/modals/PliCalculator';
 import RpliCalculator from './components/modals/RpliCalculator';
 import StandardCalculator from './components/modals/StandardCalculator';
 import { SchemeId, Lang } from './types';
-import Ticker from './components/Ticker';
-import TrackingSection from './components/TrackingSection';
 import SchemeCard from './components/SchemeCard';
 import { SCHEMES } from './constants';
 
