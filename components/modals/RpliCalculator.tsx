@@ -13,8 +13,9 @@ export default function RpliCalculator() {
   const [matAge, setMatAge] = useState<number>(60);
   const [mode, setMode] = useState<Mode>('monthly');
 
-  /* ------------------ helpers ------------------ */
-
+  /* ============================
+     MATURITY AGE OPTIONS
+     ============================ */
   const availableMatAges = useMemo(() => {
     const tableEntry = RPLI_MONTHLY_TABLE[age];
     if (!tableEntry) return [];
@@ -27,6 +28,9 @@ export default function RpliCalculator() {
     }
   }, [age, availableMatAges, matAge]);
 
+  /* ============================
+     VALIDATE SUM ASSURED
+     ============================ */
   const validateSum = () => {
     let val = sumAssured;
     if (val < 10000) val = 10000;
@@ -35,7 +39,10 @@ export default function RpliCalculator() {
     setSumAssured(val);
   };
 
-  const getPremiumDetails = (calcMode: Mode, currentAge: number) => {
+  /* ============================
+     PREMIUM CALCULATION
+     ============================ */
+  const getPremium = (calcMode: Mode, currentAge: number) => {
     const table =
       calcMode === 'monthly'
         ? RPLI_MONTHLY_TABLE
@@ -56,8 +63,11 @@ export default function RpliCalculator() {
     return Math.round(gross - rebate);
   };
 
-  const premium = getPremiumDetails(mode, age);
+  const premium = getPremium(mode, age);
 
+  /* ============================
+     MATURITY & TOTAL PAID
+     ============================ */
   const totalBonus = (sumAssured / 1000) * 48 * (matAge - age);
   const maturity = sumAssured + totalBonus;
   const multiplier = mode === 'monthly' ? 12 : mode === 'half' ? 2 : 1;
@@ -66,6 +76,9 @@ export default function RpliCalculator() {
   const format = (v: number) =>
     '₹ ' + Math.round(v).toLocaleString('en-IN');
 
+  /* ============================
+     WHATSAPP LINK (FIXED NUMBER)
+     ============================ */
   const getWhatsappLink = () => {
     const message = `Hello, I'm interested in a Rural Postal Life Insurance (RPLI) policy.
 
@@ -79,14 +92,15 @@ Maturity Value: ${format(maturity)}
 
 Please guide me further.`;
 
-    return `https://wa.me/?text=${encodeURIComponent(message)}`;
+    const WHATSAPP_NUMBER = '919347133286';
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+      message
+    )}`;
   };
 
-  /* ------------------ UI ------------------ */
-
   return (
-    <div className="pb-16">
-      {/* Header */}
+    <div className="pb-10">
+      {/* HEADER */}
       <div className="p-6 pb-4 border-b border-white/10 bg-slate-900/95 sticky top-0 z-40">
         <h2 className="text-blue-400 font-bold text-lg">
           RPLI Gram Santosh (Endowment Assurance)
@@ -96,8 +110,8 @@ Please guide me further.`;
         </p>
       </div>
 
-      <div className="p-5 space-y-6">
-        {/* Age */}
+      <div className="p-4 space-y-5">
+        {/* AGE */}
         <div className="text-center">
           <input
             type="range"
@@ -112,7 +126,7 @@ Please guide me further.`;
           </p>
         </div>
 
-        {/* Sum Assured */}
+        {/* SUM ASSURED */}
         <div className="glass-card rounded-xl p-4 border-l-4 border-blue-500">
           <label className="text-[10px] text-slate-400 font-bold uppercase">
             Sum Assured (₹)
@@ -124,6 +138,7 @@ Please guide me further.`;
             onBlur={validateSum}
             className="bg-transparent text-2xl font-black text-white w-full focus:outline-none"
           />
+
           <div className="flex justify-between items-center text-[10px] mt-3">
             <span className="text-slate-400">MATURITY AGE</span>
             <select
@@ -140,7 +155,7 @@ Please guide me further.`;
           </div>
         </div>
 
-        {/* Mode Toggle */}
+        {/* MODE TOGGLE */}
         <div className="bg-slate-800 p-1 rounded-lg flex border border-white/10">
           {(['monthly', 'half', 'yearly'] as Mode[]).map((m) => (
             <button
@@ -157,7 +172,7 @@ Please guide me further.`;
           ))}
         </div>
 
-        {/* Investment */}
+        {/* TOTAL INVESTMENT */}
         <div className="text-right">
           <p className="text-[10px] text-slate-400 uppercase font-bold">
             Your Total Investment
@@ -167,21 +182,24 @@ Please guide me further.`;
           </p>
         </div>
 
-        {/* 🔥 Maturity Highlight */}
+        {/* MATURITY */}
         <div className="p-6 rounded-2xl border-2 border-blue-500 bg-blue-500/10 text-center">
           <p className="text-xs uppercase font-bold text-blue-300 mb-1">
             You will receive at maturity
           </p>
-          <p className="text-4xl md:text-5xl font-black text-blue-400">
+          <p className="text-4xl font-black text-blue-400">
             {format(maturity)}
           </p>
           <p className="text-xs text-slate-300 mt-2">
-            Includes <b className="text-blue-400">{format(totalBonus)}</b>{' '}
+            Includes{' '}
+            <b className="text-blue-400">
+              {format(totalBonus)}
+            </b>{' '}
             Government Bonus
           </p>
         </div>
 
-        {/* WhatsApp CTA */}
+        {/* WHATSAPP CTA */}
         <div className="p-4 bg-slate-900/80 border border-white/10 rounded-2xl text-center space-y-3">
           <p className="text-[10px] text-slate-400 uppercase font-bold">
             {mode} Premium
