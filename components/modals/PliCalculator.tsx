@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { PLI_TABLE } from '../../constants';
 
-
 type Mode = 'monthly' | 'half' | 'yearly';
 
 export default function PliCalculator() {
@@ -10,6 +9,9 @@ export default function PliCalculator() {
   const [matAge, setMatAge] = useState<number>(60);
   const [mode, setMode] = useState<Mode>('monthly');
 
+  /* ============================
+     MATURITY AGE OPTIONS
+     ============================ */
   const availableMatAges = useMemo(() => {
     const tableEntry = PLI_TABLE[age];
     if (!tableEntry) return [];
@@ -22,6 +24,9 @@ export default function PliCalculator() {
     }
   }, [age, availableMatAges, matAge]);
 
+  /* ============================
+     VALIDATE SUM ASSURED
+     ============================ */
   const validateSum = () => {
     let val = sumAssured;
     if (val < 20000) val = 20000;
@@ -30,6 +35,9 @@ export default function PliCalculator() {
     setSumAssured(val);
   };
 
+  /* ============================
+     PREMIUM CALCULATION
+     ============================ */
   const calculatePremium = () => {
     const base = PLI_TABLE[age]?.[matAge];
     if (!base) return 0;
@@ -38,20 +46,30 @@ export default function PliCalculator() {
     const rebate = Math.floor(sumAssured / 20000);
 
     if (mode === 'monthly') return Math.round(gross - rebate);
-    if (mode === 'half') return Math.round((gross * 6 * 0.985) - (rebate * 6));
-    if (mode === 'yearly') return Math.round((gross * 12 * 0.97) - (rebate * 12));
+    if (mode === 'half')
+      return Math.round((gross * 6 * 0.985) - rebate * 6);
+    if (mode === 'yearly')
+      return Math.round((gross * 12 * 0.97) - rebate * 12);
+
     return 0;
   };
 
   const premium = calculatePremium();
 
+  /* ============================
+     MATURITY & TOTAL PAID
+     ============================ */
   const totalBonus = (sumAssured / 1000) * 52 * (matAge - age);
   const maturity = sumAssured + totalBonus;
   const multiplier = mode === 'monthly' ? 12 : mode === 'half' ? 2 : 1;
   const totalPaid = premium * multiplier * (matAge - age);
 
-  const format = (v: number) => '₹ ' + Math.round(v).toLocaleString('en-IN');
+  const format = (v: number) =>
+    '₹ ' + Math.round(v).toLocaleString('en-IN');
 
+  /* ============================
+     WHATSAPP LINK (FIXED NUMBER)
+     ============================ */
   const getWhatsappLink = () => {
     const message = `Hello, I'm interested in a Postal Life Insurance (PLI) policy.
 
@@ -65,12 +83,15 @@ Maturity Value: ${format(maturity)}
 
 Please guide me further.`;
 
-    return `https://wa.me/?text=${encodeURIComponent(message)}`;
+    const WHATSAPP_NUMBER = '919347133286';
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+      message
+    )}`;
   };
 
   return (
     <div className="pb-10">
-      {/* Header */}
+      {/* HEADER */}
       <div className="p-6 pb-4 border-b border-white/10 bg-slate-900/95 sticky top-0 z-40">
         <h2 className="text-yellow-400 font-bold text-lg">
           PLI Santosh (Endowment Assurance)
@@ -80,8 +101,8 @@ Please guide me further.`;
         </p>
       </div>
 
-      <div className="p-5 space-y-6">
-        {/* Age */}
+      <div className="p-4 space-y-5">
+        {/* AGE */}
         <div className="text-center">
           <input
             type="range"
@@ -96,7 +117,7 @@ Please guide me further.`;
           </p>
         </div>
 
-        {/* Sum Assured */}
+        {/* SUM ASSURED */}
         <div className="glass-card rounded-xl p-4 border-l-4 border-yellow-500">
           <label className="text-[10px] text-slate-400 font-bold uppercase">
             Sum Assured (₹)
@@ -108,6 +129,7 @@ Please guide me further.`;
             onBlur={validateSum}
             className="bg-transparent text-2xl font-black text-white w-full focus:outline-none"
           />
+
           <div className="flex justify-between items-center text-[10px] mt-3">
             <span className="text-slate-400">MATURITY AGE</span>
             <select
@@ -124,7 +146,7 @@ Please guide me further.`;
           </div>
         </div>
 
-        {/* Mode Toggle */}
+        {/* MODE TOGGLE */}
         <div className="bg-slate-800 p-1 rounded-lg flex border border-white/10">
           {(['monthly', 'half', 'yearly'] as Mode[]).map((m) => (
             <button
@@ -141,7 +163,7 @@ Please guide me further.`;
           ))}
         </div>
 
-        {/* Summary */}
+        {/* TOTAL INVESTMENT */}
         <div className="text-right">
           <p className="text-[10px] text-slate-400 uppercase font-bold">
             Your Total Investment
@@ -151,20 +173,24 @@ Please guide me further.`;
           </p>
         </div>
 
-        {/* Maturity */}
+        {/* MATURITY */}
         <div className="p-6 rounded-2xl border-2 border-yellow-500 bg-yellow-500/10 text-center">
           <p className="text-xs uppercase font-bold text-yellow-300 mb-1">
             You will receive at maturity
           </p>
-          <p className="text-4xl md:text-5xl font-black text-yellow-400">
+          <p className="text-4xl font-black text-yellow-400">
             {format(maturity)}
           </p>
           <p className="text-xs text-slate-300 mt-2">
-            Includes <b className="text-yellow-400">{format(totalBonus)}</b> Government Bonus
+            Includes{' '}
+            <b className="text-yellow-400">
+              {format(totalBonus)}
+            </b>{' '}
+            Government Bonus
           </p>
         </div>
 
-        {/* WhatsApp CTA */}
+        {/* WHATSAPP CTA */}
         <div className="p-4 bg-slate-900/80 border border-white/10 rounded-2xl text-center space-y-3">
           <p className="text-[10px] text-slate-400 uppercase font-bold">
             {mode} Premium
